@@ -4,12 +4,12 @@ const geocodecache = {};
 const getGeocode = async code => {
   const cache = geocodecache[code];
   if (cache) { return cache; };
-  const fn = `./geocode/${code}.json`;
+  const fn = `geocode/${code}.json`;
   let data = null;
   if (import.meta && import.meta.url && import.meta.url.startsWith("file://") && window.Deno) {
-    data = JSON.parse(await Deno.readTextFile(fn));
+    data = JSON.parse(await Deno.readTextFile("./" + fn));
   } else {
-    data = await (await fetch(fn)).json();
+    data = await (await fetch("https://code4sabae.github.io/lgcode/" + fn)).json();
   }
   geocodecache[code] = data;
   return data;
