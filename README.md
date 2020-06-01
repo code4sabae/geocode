@@ -1,6 +1,7 @@
 # 住所ジオコーディング
 
 住所（現在は丁目レベル）から緯度経度を返すESモジュール geocode.mjs  
+（84KB + 地方公共団体コード毎に1KB〜88KB）  
 
 [![esmodules](https://taisukef.github.com/denolib/esmodulesbadge.svg)](https://developer.mozilla.org/ja/docs/Web/JavaScript/Guide/Modules)
 [![deno](https://taisukef.github.com/denolib/denobadge.svg)](https://deno.land/)

@@ -1,4 +1,4 @@
-import { getLGCode, findCity } from "./lgcode.mjs";
+import { getLGCode, findCity } from "https://code4sabae.github.io/lgcode/lgcode.mjs";
 
 const geocodecache = {};
 const getGeocode = async code => {
