@@ -7,7 +7,9 @@ const getGeocode = async code => {
   const fn = `geocode/${code}.json`;
   let data = null;
   if (import.meta && import.meta.url && import.meta.url.startsWith("file://") && window.Deno) {
-    data = JSON.parse(await Deno.readTextFile("./" + fn));
+    const url = import.meta.url;
+    const path = url.substring("file://".length, url.lastIndexOf("/") + 1);
+    data = JSON.parse(await Deno.readTextFile(path + fn));
   } else {
     data = await (await fetch("https://code4sabae.github.io/geocode/" + fn)).json();
   }
@@ -17,11 +19,10 @@ const getGeocode = async code => {
 
 const getLatLng = async (prefname, cityname, chome) => {
   const code = getLGCode(prefname, cityname);
-  // console.log("code", code);
+  if (!code) { return null; }
   const citygeo = await getGeocode(code);
-  // console.log(citygeo);
-  const latlng = citygeo[chome];
-  return latlng;
+  if (!citygeo) { return null; }
+  return citygeo[chome];
 };
 
-export { getLatLng };
+export { getLatLng, getGeocode };
