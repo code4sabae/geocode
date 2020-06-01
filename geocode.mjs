@@ -9,7 +9,7 @@ const getGeocode = async code => {
   if (import.meta && import.meta.url && import.meta.url.startsWith("file://") && window.Deno) {
     data = JSON.parse(await Deno.readTextFile("./" + fn));
   } else {
-    data = await (await fetch("https://code4sabae.github.io/lgcode/" + fn)).json();
+    data = await (await fetch("https://code4sabae.github.io/geocode/" + fn)).json();
   }
   geocodecache[code] = data;
   return data;
