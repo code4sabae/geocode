@@ -18,6 +18,7 @@ const getGeocode = async code => {
 };
 
 const getLatLng = async (prefname, cityname, chome) => {
+  if (chome == null) { return null; }
   const code = getLGCode(prefname, cityname);
   if (!code) { return null; }
   const citygeo = await getGeocode(code);
