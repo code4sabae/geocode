@@ -3,7 +3,7 @@
 https://nlftp.mlit.go.jp/isj/
 */
 
-const ver = "16.0a" // 平成30年度
+const ver = "16.0a"; // 平成30年度
 
 Deno.mkdirSync("temp");
 for (let i = 1; i <= 47; i++) {

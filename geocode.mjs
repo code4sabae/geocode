@@ -1,29 +1,75 @@
-import { getLGCode } from "https://code4sabae.github.io/lgcode/lgcode.mjs";
+import {
+  getLGCode,
+  fromLGCode,
+} from "https://code4sabae.github.io/lgcode/lgcode.mjs";
+import Bounds from "./Bounds.mjs";
 
-const geocodecache = {};
-const getGeocode = async code => {
-  const cache = geocodecache[code];
-  if (cache) { return cache; };
-  const fn = `geocode/${code}.json`;
-  let data = null;
-  if (import.meta && import.meta.url && import.meta.url.startsWith("file://") && window.Deno) {
+const baseurl = "https://code4sabae.github.io/geocode/"; // from import.meta.url?
+const fetchJSON = async (fn) => {
+  if (
+    import.meta && import.meta.url && import.meta.url.startsWith("file://") &&
+    window.Deno
+  ) {
     const url = import.meta.url;
     const path = url.substring("file://".length, url.lastIndexOf("/") + 1);
-    data = JSON.parse(await Deno.readTextFile(path + fn));
-  } else {
-    data = await (await fetch("https://code4sabae.github.io/geocode/" + fn)).json();
+    return JSON.parse(await Deno.readTextFile(path + fn));
   }
+  return await (await fetch(baseurl + fn)).json();
+};
+
+const geocodecache = {};
+const getGeocode = async (code) => {
+  const cache = geocodecache[code];
+  if (cache) return cache;
+  const data = await fetchJSON(`data/geocode/${code}.json`);
   geocodecache[code] = data;
   return data;
 };
 
 const getLatLng = async (name1, name2, chome) => { // 福井県 鯖江市、札幌市 中央区、など2つ指定
-  if (chome == null) { return null; }
+  if (chome == null) return null;
   const code = getLGCode(name1, name2);
-  if (!code) { return null; }
+  if (!code) return null;
   const citygeo = await getGeocode(code);
-  if (!citygeo) { return null; }
-  return citygeo[chome];
+  if (!citygeo) return null;
+  return citygeo[chome].split(",").map(d => parseFloat(d)); // TODO: data -> float[]
 };
 
-export { getLatLng, getGeocode };
+const getNearest = (geocode, lat, lng) => {
+  let min = 1 << 30;
+  let cmin = null;
+  for (const n in geocode) {
+    const [latn, lngn] = geocode[n].split(",").map((d) => parseFloat(d)); // TODO: data -> float[]
+    const d = Math.abs(lat - latn) + Math.abs(lng - lngn);
+    if (d < min) {
+      min = d;
+      cmin = n;
+    }
+  }
+  return cmin;
+};
+
+let geobounds = null;
+const fromLatLng = async (lat, lng) => {
+  if (!geobounds) {
+    geobounds = await fetchJSON("data/geobounds.json");
+  }
+  for (const lgcode in geobounds) { // lat1, lng1, lat2, lng2
+    const r = geobounds[lgcode];
+    if (Bounds.contains(r, lat, lng)) {
+      const geocode = await getGeocode(lgcode);
+      const c = getNearest(geocode, lat, lng);
+      if (!c) return null;
+      const adr = fromLGCode(lgcode);
+      return [parseInt(lgcode), adr, c];
+    }
+  }
+  return null;
+};
+
+if (import.meta.main) {
+  console.log(await getLatLng("福井県", "鯖江市", "新横江2")); // , [35.941043,136.199640];
+  console.log(await fromLatLng(35.941043 - 1.1, 136.199640));
+}
+
+export { getLatLng, getGeocode, fromLatLng };
