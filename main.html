@@ -26,12 +26,9 @@ import { getLatLng, fromLatLng } from "https://code4sabae.github.io/geocode/geoc
 
 window.onload = async () => {
   const setInput = (input, func, result) => {
-    input.result = result;
-    input.func = func;
     const f = async function () {
       const params = input.value.split(",");
       const json = await func(params[0], params[1], params[2]);
-      console.log(func, params, "->", json);
       result.value = JSON.stringify(json, null, 2);
     };
     input.onkeyup = input.onchange = f;
