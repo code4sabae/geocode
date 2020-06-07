@@ -1,6 +1,6 @@
-# 住所ジオコーディング geocode ES Modules ver.
+# 住所ジオコーディング・逆ジオコーディング（丁目レベル） geocode ES Modules ver.
 
-住所（現在は丁目レベル）から緯度経度を返すESモジュール geocode.mjs  
+住所（現在は丁目レベル）と緯度経度を相互変換するESモジュール geocode.mjs  
 （84KB + 地方公共団体コード毎に1KB〜88KB）  
 
 [![esmodules](https://taisukef.github.com/denolib/esmodulesbadge.svg)](https://developer.mozilla.org/ja/docs/Web/JavaScript/Guide/Modules)
@@ -12,6 +12,7 @@
 import { getLatLng } from "https://code4sabae.github.io/geocode/geocode.mjs";
 
 console.log(await getLatLng("福井県", "鯖江市", "新横江2"));
+console.log(await fromLatLng(35.941043, 136.199640));
 ```
 
 ## データ作成
@@ -21,6 +22,7 @@ $ cd tools
 $ deno run -A download.mjs
 $ sh makeisj.sh
 $ deno run -A makedata.mjs
+$ deno run -A makegeobounds.mjs
 ```
 
 ## テスト

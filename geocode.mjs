@@ -67,9 +67,4 @@ const fromLatLng = async (lat, lng) => {
   return null;
 };
 
-if (import.meta.main) {
-  console.log(await getLatLng("福井県", "鯖江市", "新横江2")); // , [35.941043,136.199640];
-  console.log(await fromLatLng(35.941043 - 1.1, 136.199640));
-}
-
 export { getLatLng, getGeocode, fromLatLng };
