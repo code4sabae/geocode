@@ -15,6 +15,8 @@ console.log(await getLatLng("福井県", "鯖江市", "新横江2"));
 console.log(await fromLatLng(35.941043, 136.199640));
 ```
 
+webアプリサンプル（ジオコーディング、逆ジオコーディング） [main.html](https://code4sabae.github.io/geocode/main.html)  
+
 ## データ作成
 
 ```
