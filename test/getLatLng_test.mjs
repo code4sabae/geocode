@@ -6,6 +6,10 @@ Deno.test("緯度経度取得", async () => {
   assertEquals(await getLatLng("福井県", "鯖江市", "新横江2"), [35.941043,136.199640]);
 });
 
+Deno.test("緯度経度取得 失敗、丁目該当なし", async () => {
+  assertEquals(await getLatLng("福井県", "鯖江市", "新横江20"), null);
+});
+
 Deno.test("緯度経度取得 失敗（都道府県、市区町村、丁目まで必要）", async () => {
   assertEquals(await getLatLng("福井県", "鯖江市"), null);
 });

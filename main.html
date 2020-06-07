@@ -8,14 +8,14 @@
 <h2>住所のジオコーディング（住所から緯度経度）</h2>
 <input type=text id=input1 value="福井県,鯖江市,新横江2"><br>
 ↓<br>
-<textarea id="result1" style="width:90vw;height:20em;"></textarea>
+<textarea id="result1" style="width:90vw;height:6em;"></textarea>
 </div>
 
 <div>
 <h2>住所の逆ジオコーディング（緯度経度から住所）</h2>
 <input type=text id=input2 value="35.941043,136.199640"><br>
 ↓<br>
-<textarea id="result2" style="width:90vw;height:20em;"></textarea>
+<textarea id="result2" style="width:90vw;height:12em;"></textarea>
 </div>
   
 <hr>
@@ -24,16 +24,23 @@
 <script type="module">
 import { getLatLng, fromLatLng } from "https://code4sabae.github.io/geocode/geocode.mjs"
 
-const setInput = (input, func) => {
-  input.onkeyup = input.onchange = async function () {
-    const params = input.value.split(",");
-    const json = func(params[0], params[1], params[2]);
-    result.value = JSON.stringify(json, null, 2);
+window.onload = async () => {
+  const setInput = (input, func, result) => {
+    input.result = result;
+    input.func = func;
+    const f = async function () {
+      const params = input.value.split(",");
+      const json = await func(params[0], params[1], params[2]);
+      console.log(func, params, "->", json);
+      result.value = JSON.stringify(json, null, 2);
+    };
+    input.onkeyup = input.onchange = f;
+    f();
   };
-};
 
-setInput(input1, getLatLng);
-setInput(input1, fromLatLng);
+  setInput(input1, getLatLng, result1);
+  setInput(input2, fromLatLng, result2);
+};
 
 </script>
 </body>
