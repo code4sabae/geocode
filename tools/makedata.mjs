@@ -2,31 +2,14 @@
 # to make geocode/*.json
 deno run -A download.mjs
 sh makeisj.sh
-gzcat temp/isj.txt.gz | deno run --allow-read makedata.mjs
+sh makedata.sh
 */
 
 import { TextProtoReader } from "https://deno.land/std/textproto/mod.ts";
 import { BufReader } from "https://deno.land/std/io/bufio.ts";
-import { getLGCode } from "https://code4sabae.github.io/lgcode/lgcode.mjs";
+//import { getLGCode } from "https://code4sabae.github.io/lgcode/lgcode.mjs";
+import { getLGCode } from "../../japan/lgcode.mjs";
 import Chome from "../Chome.mjs";
-
-const simplifyCity = function (cityname) {
-  // 市と区、分離
-  if (cityname.endsWith("区")) {
-    const n = cityname.indexOf("市");
-    if (n > 0) {
-      return cityname.substring(n + 1);
-    }
-  }
-  // 群、分離
-  if (cityname.endsWith("町") || cityname.endsWith("村")) {
-    const n = cityname.indexOf("郡");
-    if (n > 0) {
-      return cityname.substring(n + 1);
-    }
-  }
-  return cityname;
-};
 
 // citycode: [ chome2: { lat, lng } ] // chiban 無視
 const geocode = {};
@@ -69,17 +52,24 @@ for (;;) {
   "更新後履歴フラグ"
     */
   const [pref, city, chome, alias, chiban, axis, x, y, lat, lng] = col;
-  const chome2 = Chome.simplify(chome);
-  const city2 = simplifyCity(city);
+  let city2 = city;
+  if (city2 === "篠山市") city2 = "丹波篠山市"; // v16は丹波篠山市に改名する前のデータ
+  if (pref === "福岡県" || city2 === "筑紫郡那珂川町") city2 = "那珂川市"; // v16は那珂川市に改名する前のデータ
   const code = await getLGCode(pref, city2);
+  if (Array.isArray(code)) {
+    console.log(pref, city, code);
+    Deno.exit(0);
+  }
   // console.log(code, pref, city2, chome2, alias, chiban, lat, lng);
   if (code === null) { // v16 全データ ok!
-    console.log(code, pref, city2, chome2, alias, chiban, lat, lng);
+    console.log(code, pref, city, alias, chiban, lat, lng);
+    // null 兵庫県 篠山市 今田町本荘  22 34.999361 135.073946
     Deno.exit(0);
   }
 
+  const chome2 = Chome.simplify(chome);
   const ar = geocode[code];
-  const latlng = [lat, lng];
+  const latlng = [lat, lng].map(d => parseFloat(d));
   if (!ar) {
     const v = {};
     v[chome2] = latlng;

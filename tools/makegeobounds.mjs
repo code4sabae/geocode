@@ -11,7 +11,7 @@ for (const f of files) {
   const json = JSON.parse(Deno.readTextFileSync(path + f.name));
   const bounds = [];
   for (const name in json) {
-    const ll = json[name].split(",").map((d) => parseFloat(d));
+    const ll = json[name];
     Bounds.append(bounds, ll[0], ll[1]);
   }
   map[code] = bounds;

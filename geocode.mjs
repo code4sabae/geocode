@@ -34,15 +34,17 @@ const getLatLng = async (name1, name2, chome) => { // 福井県 鯖江市、札�
   if (!citygeo) return null;
   const ll = citygeo[chome];
   if (!ll) return null;
-  return ll.split(",").map(d => parseFloat(d)); // TODO: data -> float[]
+  return ll;
 };
 
 const getNearest = (geocode, lat, lng) => {
   let min = 1 << 30;
   let cmin = null;
   for (const n in geocode) {
-    const [latn, lngn] = geocode[n].split(",").map((d) => parseFloat(d)); // TODO: data -> float[]
-    const d = Math.abs(lat - latn) + Math.abs(lng - lngn);
+    const [latn, lngn] = geocode[n];
+    const dlat = lat - latn;
+    const dlng = lng - lngn;
+    const d = dlat * dlat + dlng * dlng;
     if (d < min) {
       min = d;
       cmin = n;
