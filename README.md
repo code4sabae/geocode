@@ -1,7 +1,7 @@
 # 住所ジオコーディング・逆ジオコーディング（丁目レベル） geocode ES Modules ver.
 
 住所（現在は丁目レベル）と緯度経度を相互変換するESモジュール geocode.mjs  
-（84KB + 地方公共団体コード毎に1KB〜88KB）  
+（84KB + 地方公共団体コード毎に1KB〜195KB）  
 
 [![esmodules](https://taisukef.github.com/denolib/esmodulesbadge.svg)](https://developer.mozilla.org/ja/docs/Web/JavaScript/Guide/Modules)
 [![deno](https://taisukef.github.com/denolib/denobadge@1.0.5.svg)](https://deno.land/)
