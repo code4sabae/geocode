@@ -7,8 +7,8 @@ sh makedata.sh
 
 import { TextProtoReader } from "https://deno.land/std/textproto/mod.ts";
 import { BufReader } from "https://deno.land/std/io/bufio.ts";
-//import { getLGCode } from "https://code4sabae.github.io/lgcode/lgcode.mjs";
-import { getLGCode } from "../../japan/lgcode.mjs";
+import { getLGCode } from "https://code4sabae.github.io/lgcode/lgcode.mjs";
+// import { getLGCode } from "../../japan/lgcode.mjs";
 import Chome from "../Chome.mjs";
 
 // citycode: [ chome2: { lat, lng } ] // chiban 無視
