@@ -4,7 +4,7 @@
 （84KB + 地方公共団体コード毎に1KB〜195KB）  
 
 [![esmodules](https://taisukef.github.com/denolib/esmodulesbadge.svg)](https://developer.mozilla.org/ja/docs/Web/JavaScript/Guide/Modules)
-[![deno](https://taisukef.github.com/denolib/denobadge@1.0.5.svg)](https://deno.land/)
+[![deno](https://taisukef.github.com/denolib/denobadge.svg)](https://deno.land/)
 
 ## 使用例
 
